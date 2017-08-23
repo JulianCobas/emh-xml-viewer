@@ -8,33 +8,33 @@
  * $Date: 2007-10-03 19:08:15 -0700 (Wed, 03 Oct 2007) $
  */
 
-function LoadXML(ParentElementID,URL) 
+function LoadXML(ParentElementID,URL)
 {
 		var xmlHolderElement = GetParentElement(ParentElementID);
 		if (xmlHolderElement==null) { return false; }
 		ToggleElementVisibility(xmlHolderElement);
 		return RequestURL(URL,URLReceiveCallback,ParentElementID);
 }
-function LoadXMLDom(ParentElementID,xmlDoc) 
+function LoadXMLDom(ParentElementID,xmlDoc)
 {
 	if (xmlDoc) {
 		var xmlHolderElement = GetParentElement(ParentElementID);
 		if (xmlHolderElement==null) { return false; }
 		while (xmlHolderElement.childNodes.length) { xmlHolderElement.removeChild(xmlHolderElement.childNodes.item(xmlHolderElement.childNodes.length-1));	}
 		var Result = ShowXML(xmlHolderElement,xmlDoc.documentElement,0);
-		
-		var ReferenceElement = document.createElement('div');
-		var Link = document.createElement('a');		
-		Link.setAttribute('href','http://www.levmuchnik.net/Content/ProgrammingTips/WEB/XMLDisplay/DisplayXMLFileWithJavascript.html');
-		var TextNode = document.createTextNode('Source: Lev Muchnik');
-		Link.appendChild(TextNode);
 
-		xmlHolderElement.appendChild(Link);
+		// var ReferenceElement = document.createElement('div');
+		// var Link = document.createElement('a');
+		// Link.setAttribute('href','http://www.levmuchnik.net/Content/ProgrammingTips/WEB/XMLDisplay/DisplayXMLFileWithJavascript.html');
+		// var TextNode = document.createTextNode('Source: Lev Muchnik');
+		// Link.appendChild(TextNode);
+
+		// xmlHolderElement.appendChild(Link);
 		return Result;
 	}
 	else { return false; }
 }
-function LoadXMLString(ParentElementID,XMLString) 
+function LoadXMLString(ParentElementID,XMLString)
 {
 	xmlDoc = CreateXMLDOM(XMLString);
 	return LoadXMLDom(ParentElementID,xmlDoc) ;
@@ -45,7 +45,7 @@ function LoadXMLString(ParentElementID,XMLString)
 function GetParentElement(ParentElementID)
 {
 	if (typeof(ParentElementID)=='string') {	return document.getElementById(ParentElementID);	}
-	else if (typeof(ParentElementID)=='object') { return ParentElementID;} 
+	else if (typeof(ParentElementID)=='object') { return ParentElementID;}
 	else { return null; }
 }
 function URLReceiveCallback(httpRequest,xmlHolderElement)
@@ -65,18 +65,18 @@ function URLReceiveCallback(httpRequest,xmlHolderElement)
         }
         catch( e ) {
             return false;
-        }	
+        }
 }
 function RequestURL(url,callback,ExtraData) { // based on: http://developer.mozilla.org/en/docs/AJAX:Getting_Started
         var httpRequest;
         if (window.XMLHttpRequest) { // Mozilla, Safari, ...
             httpRequest = new XMLHttpRequest();
             if (httpRequest.overrideMimeType) { httpRequest.overrideMimeType('text/xml'); }
-        } 
+        }
         else if (window.ActiveXObject) { // IE
-            try { httpRequest = new ActiveXObject("Msxml2.XMLHTTP");   } 
+            try { httpRequest = new ActiveXObject("Msxml2.XMLHTTP");   }
             catch (e) {
-				   try { httpRequest = new ActiveXObject("Microsoft.XMLHTTP"); } 
+				   try { httpRequest = new ActiveXObject("Microsoft.XMLHTTP"); }
 				   catch (e) {}
             }
         }
@@ -86,12 +86,12 @@ function RequestURL(url,callback,ExtraData) { // based on: http://developer.mozi
         httpRequest.send('');
 		return true;
     }
-function CreateXMLDOM(XMLStr) 
+function CreateXMLDOM(XMLStr)
 {
 	if (window.ActiveXObject)
 	 {
-		  xmlDoc=new ActiveXObject("Microsoft.XMLDOM"); 
-		  xmlDoc.loadXML(XMLStr);	
+		  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+		  xmlDoc.loadXML(XMLStr);
 		  return xmlDoc;
 	}
 	else if (document.implementation && document.implementation.createDocument)	  {
@@ -101,7 +101,7 @@ function CreateXMLDOM(XMLStr)
 	else {
 		return null;
 	}
-}		
+}
 
 var IDCounter = 1;
 var NestingIndent = 15;
@@ -113,11 +113,11 @@ function ShowXML(xmlHolderElement,RootNode,indent)
 	TagEmptyElement.className = 'Element emh-xml-viewer';
 	TagEmptyElement.style.position = 'relative';
 	TagEmptyElement.style.left = NestingIndent+'px';
-	if (RootNode.childNodes.length==0) { 
+	if (RootNode.childNodes.length==0) {
     var ClickableElement = AddTextNode(TagEmptyElement,'','Clickable emh-xml-viewer') ;
-    ClickableElement.id = 'div_empty_' + IDCounter;	  
+    ClickableElement.id = 'div_empty_' + IDCounter;
     AddTextNode(TagEmptyElement,'<','Utility emh-xml-viewer') ;
-    AddTextNode(TagEmptyElement,RootNode.nodeName ,'NodeName emh-xml-viewer') 
+    AddTextNode(TagEmptyElement,RootNode.nodeName ,'NodeName emh-xml-viewer')
     for (var i = 0; RootNode.attributes && i < RootNode.attributes.length; ++i) {
       CurrentAttribute  = RootNode.attributes.item(i);
       AddTextNode(TagEmptyElement,' ' + CurrentAttribute.nodeName ,'AttributeName emh-xml-viewer') ;
@@ -125,17 +125,17 @@ function ShowXML(xmlHolderElement,RootNode,indent)
       AddTextNode(TagEmptyElement,'"' + CurrentAttribute.nodeValue + '"','AttributeValue emh-xml-viewer') ;
     }
     AddTextNode(TagEmptyElement,' />') ;
-    xmlHolderElement.appendChild(TagEmptyElement);	
-    //SetVisibility(TagEmptyElement,true);    
+    xmlHolderElement.appendChild(TagEmptyElement);
+    //SetVisibility(TagEmptyElement,true);
 	}
 	else { // mo child nodes
-    
+
     var ClickableElement = AddTextNode(TagEmptyElement,'+','Clickable emh-xml-viewer') ;
     ClickableElement.onclick  = function() {ToggleElementVisibility(this); }
-    ClickableElement.id = 'div_empty_' + IDCounter;	
-		
+    ClickableElement.id = 'div_empty_' + IDCounter;
+
     AddTextNode(TagEmptyElement,'<','Utility emh-xml-viewer') ;
-    AddTextNode(TagEmptyElement,RootNode.nodeName ,'NodeName emh-xml-viewer') 
+    AddTextNode(TagEmptyElement,RootNode.nodeName ,'NodeName emh-xml-viewer')
     for (var i = 0; RootNode.attributes && i < RootNode.attributes.length; ++i) {
       CurrentAttribute  = RootNode.attributes.item(i);
       AddTextNode(TagEmptyElement,' ' + CurrentAttribute.nodeName ,'AttributeName emh-xml-viewer') ;
@@ -146,21 +146,21 @@ function ShowXML(xmlHolderElement,RootNode,indent)
     AddTextNode(TagEmptyElement,'>  </','Utility emh-xml-viewer') ;
     AddTextNode(TagEmptyElement,RootNode.nodeName,'NodeName emh-xml-viewer') ;
     AddTextNode(TagEmptyElement,'>','Utility emh-xml-viewer') ;
-    xmlHolderElement.appendChild(TagEmptyElement);	
+    xmlHolderElement.appendChild(TagEmptyElement);
     SetVisibility(TagEmptyElement,false);
     //----------------------------------------------
-    
+
     var TagElement = document.createElement('div');
     TagElement.className = 'Element emh-xml-viewer';
     TagElement.style.position = 'relative';
     TagElement.style.left = NestingIndent+'px';
     ClickableElement = AddTextNode(TagElement,'-','Clickable emh-xml-viewer') ;
     ClickableElement.onclick  = function() {ToggleElementVisibility(this); }
-    ClickableElement.id = 'div_content_' + IDCounter;		
+    ClickableElement.id = 'div_content_' + IDCounter;
     ++IDCounter;
     AddTextNode(TagElement,'<','Utility emh-xml-viewer') ;
     AddTextNode(TagElement,RootNode.nodeName ,'NodeName emh-xml-viewer') ;
-    
+
     for (var i = 0; RootNode.attributes && i < RootNode.attributes.length; ++i) {
         CurrentAttribute  = RootNode.attributes.item(i);
         AddTextNode(TagElement,' ' + CurrentAttribute.nodeName ,'AttributeName emh-xml-viewer') ;
@@ -176,34 +176,34 @@ function ShowXML(xmlHolderElement,RootNode,indent)
       }
       else {
         NodeContent =RootNode.childNodes.item(i).nodeValue;
-      }					
-    }			
+      }
+    }
     if (RootNode.nodeValue) {
       NodeContent = RootNode.nodeValue;
     }
-    if (NodeContent) {	
+    if (NodeContent) {
       var ContentElement = document.createElement('div');
       ContentElement.style.position = 'relative';
-      ContentElement.style.left = NestingIndent+'px';			
+      ContentElement.style.left = NestingIndent+'px';
       AddTextNode(ContentElement,NodeContent ,'NodeValue emh-xml-viewer') ;
       TagElement.appendChild(ContentElement);
-    }			
+    }
     AddTextNode(TagElement,'  </','Utility emh-xml-viewer') ;
     AddTextNode(TagElement,RootNode.nodeName,'NodeName emh-xml-viewer') ;
     AddTextNode(TagElement,'>','Utility emh-xml-viewer') ;
-    xmlHolderElement.appendChild(TagElement);	
+    xmlHolderElement.appendChild(TagElement);
   }
-	
+
 	// if (indent==0) { ToggleElementVisibility(TagElement.childNodes(0)); } - uncomment to collapse the external element
 	return Result;
 }
-function AddTextNode(ParentNode,Text,Class) 
+function AddTextNode(ParentNode,Text,Class)
 {
 	NewNode = document.createElement('span');
 	if (Class) {  NewNode.className  = Class;}
 	if (Text) { NewNode.appendChild(document.createTextNode(Text)); }
 	if (ParentNode) { ParentNode.appendChild(NewNode); }
-	return NewNode;		
+	return NewNode;
 }
 function CompatibleGetElementByID(id)
 {
@@ -225,14 +225,14 @@ function SetVisibility(HTMLElement,Visible)
 	if (!HTMLElement) { return; }
 	var VisibilityStr  = (Visible) ? 'block' : 'none';
 	if (document.getElementById) { // DOM3 = IE5, NS6
-		HTMLElement.style.display =VisibilityStr; 
+		HTMLElement.style.display =VisibilityStr;
 	}
 	else {
 		if (document.layers) { // Netscape 4
-			HTMLElement.display = VisibilityStr; 
+			HTMLElement.display = VisibilityStr;
 		}
 		else { // IE 4
-			HTMLElement.id.style.display = VisibilityStr; 
+			HTMLElement.id.style.display = VisibilityStr;
 		}
 	}
 }
